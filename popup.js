@@ -6,17 +6,56 @@ document.head.appendChild(script);
 let editor;
 let statusEl;
 let saveTimeout;
+let isDragging = false;
+let startWidth;
+let startHeight;
 
 // 初始化编辑器
 function initEditor() {
   editor = document.getElementById('editor');
   statusEl = document.getElementById('status');
+  const resizeHandle = document.getElementById('resize-handle');
 
-  // 从storage加载保存的内容
-  chrome.storage.sync.get(['notes'], (result) => {
+  // 从storage加载保存的内容和窗口大小
+  chrome.storage.sync.get(['notes', 'windowSize'], (result) => {
     if (result.notes) {
       editor.value = result.notes;
     }
+    if (result.windowSize) {
+      document.body.style.width = result.windowSize.width + 'px';
+      document.body.style.height = result.windowSize.height + 'px';
+    }
+  });
+
+  // 初始化拖动缩放功能
+  resizeHandle.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startWidth = document.body.offsetWidth;
+    startHeight = document.body.offsetHeight;
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    
+    const newWidth = startWidth + (e.clientX - startWidth);
+    const newHeight = startHeight + (e.clientY - startHeight);
+    
+    // 设置最小尺寸
+    document.body.style.width = Math.max(300, newWidth) + 'px';
+    document.body.style.height = Math.max(200, newHeight) + 'px';
+    
+    // 保存新的窗口大小
+    chrome.storage.sync.set({
+      windowSize: {
+        width: document.body.offsetWidth,
+        height: document.body.offsetHeight
+      }
+    });
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
   });
 
   // 监听输入事件，实现自动保存

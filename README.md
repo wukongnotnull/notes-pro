@@ -35,7 +35,7 @@
 
 1. 克隆仓库：
 ```bash
-git clone [仓库地址]
+git clone https://github.com/wukongnotnull/notes-pro.git
 cd notes-pro
 ```
 
@@ -48,4 +48,4 @@ npm install
 
 ## 许可证
 
-ISC
+MIT
