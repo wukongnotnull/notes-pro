@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <style>
+    .primary { fill: #FFB340; }
+    .secondary { fill: #FFD68A; }
+  </style>
+  <rect class="primary" x="16" y="16" width="96" height="96" rx="8" ry="8"/>
+  <path class="secondary" d="M32 40h64v10H32zm0 20h64v10H32zm0 20h48v10H32z"/>
+</svg>
